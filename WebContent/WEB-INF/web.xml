@@ -8,9 +8,20 @@
 		<servlet-name>getBestMoves</servlet-name>
 		<servlet-class>getBestMoves</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>GetBestMoves</display-name>
+		<servlet-name>GetBestMoves</servlet-name>
+		<servlet-class>GetBestMoves</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>getBestMoves</servlet-name>
 		<url-pattern>/getBestMoves</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetBestMoves</servlet-name>
+		<url-pattern>/GetBestMoves</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

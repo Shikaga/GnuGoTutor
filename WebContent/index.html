@@ -2,8 +2,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<script type="text/javascript" src="lib/jquery.js"></script>
 </head>
 <body>
-Hello World 2!
+Hello World 1!1
+<button id="button1">LOL!</button>
+<script>
+function lol() {
+	alert('win');
+}
+	
+$("#button1").click(function() {	
+	$.getJSON("GetBestMoves", {}, function(data) {alert('win');});
+});
+</script>
 </body>
 </html>
