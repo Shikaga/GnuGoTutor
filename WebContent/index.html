@@ -1,12 +1,71 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <script type="text/javascript" src="lib/jquery.js"></script>
 </head>
 <body>
 Hello World 1!1
 <button id="button1">LOL!</button>
+<canvas id="canvas" width="500" height="500">
+</canvas>
+
+<script>
+
+var Point = function(x, y) {
+	this.x = x;
+	this.y = y;
+} 
+
+var moves = [""];
+
+function drawCircle(x, y) {
+	context.fillStyle = '#000'; // blue
+	context.beginPath();
+	context.arc(x, y, 10, 0, Math.PI*2, true); 
+	context.closePath();
+	context.fill();	
+}
+
+function canvasOnClick(e) {
+	var x= Math.floor((e.offsetX/25)-.5);
+	var y= Math.floor((e.offsetY/25)-.5);
+	var point1 = new Point(x,y);
+	console.log(point1);
+	moves.push(point1);
+	for (point in moves) {
+		drawStone(moves[point].x, moves[point].y);
+	}
+}
+
+$("#canvas").click(canvasOnClick);
+
+function drawStone(x, y) {
+	drawCircle(25+x*25, 25+y*25);
+}
+
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+console.log(context);
+context.fillStyle   = '#EBD246'; // blue
+// Draw some rectangles.
+context.fillRect  (0, 0, 500, 500);
+var i=0;
+var xOffset = 25.5;
+var yOffset = 25.5;
+for (i =0; i < 19; i++) {
+	context.moveTo(i*25+xOffset, yOffset);
+	context.lineTo(i*25+yOffset, 475.5);
+	context.stroke();
+}
+for (i =0; i < 19; i++) {
+	context.moveTo(xOffset, i*25+yOffset);
+	context.lineTo(475.5, i*25+xOffset);
+	context.stroke();
+}
+drawStone(3,3);
+drawStone(3,3);
+
+</script>
 <script>
 function lol() {
 	alert('win');
