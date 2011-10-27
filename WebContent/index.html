@@ -16,15 +16,64 @@ var Point = function(x, y) {
 	this.y = y;
 } 
 
-var moves = [""];
+Point.prototype.toString = function() {
+	return this.x + "," + this.y;
+}
 
-function drawCircle(x, y) {
-	context.fillStyle = '#000'; // blue
+function arrayToString(array) {
+	var returnString = "";
+	var firstMove = true;
+	for (var move in array) {
+		if (!firstMove) returnString += " ";
+		returnString += array[move].toString();
+		firstMove = false;
+	}
+	return returnString;
+}
+var moves = [];
+var movesString = "";
+
+function drawCircle(x, y, r) {
 	context.beginPath();
-	context.arc(x, y, 10, 0, Math.PI*2, true); 
+	context.arc(x, y, r, 0, Math.PI*2, true); 
 	context.closePath();
 	context.fill();	
 }
+
+function drawBoard() {
+	context.fillStyle   = '#EBD246'; // blue
+	// Draw some rectangles.
+	context.fillRect  (0, 0, 500, 500);
+	var i=0;
+	var xOffset = 25.5;
+	var yOffset = 25.5;
+	context.clear;
+	for (i =0; i < 19; i++) {
+		context.beginPath();
+		context.moveTo(i*25+xOffset, yOffset);
+		context.lineTo(i*25+yOffset, 475.5);
+		context.stroke();
+		context.closePath();
+	}
+	for (i =0; i < 19; i++) {
+		context.beginPath();
+		context.moveTo(xOffset, i*25+yOffset);
+		context.lineTo(475.5, i*25+xOffset);
+		context.stroke();
+		context.closePath();
+	}	
+}
+
+function drawCanvas() {
+	drawBoard();
+	var color = true;
+	for (move in moves) {
+		drawStone(moves[move].x, moves[move].y, color);
+		color = !color;
+		console.log(color);
+	}
+}
+
 
 function canvasOnClick(e) {
 	var x= Math.floor((e.offsetX/25)-.5);
@@ -32,38 +81,45 @@ function canvasOnClick(e) {
 	var point1 = new Point(x,y);
 	console.log(point1);
 	moves.push(point1);
-	for (point in moves) {
-		drawStone(moves[point].x, moves[point].y);
-	}
+	
+	movesString = arrayToString(moves);
+	$.getJSON("GetBestMoves", {moves: movesString}, 
+		function(data) {
+			for (move in data.moves) {
+				console.log(data.moves[move].value)
+				drawMove(data.moves[move].x,data.moves[move].y, data.moves[move].value);
+			}
+		});
+	
+	drawCanvas();
 }
 
 $("#canvas").click(canvasOnClick);
 
-function drawStone(x, y) {
-	drawCircle(25+x*25, 25+y*25);
+function drawStone(x, y, black) {
+	context.fillStyle = '#fff';
+	if (black) {
+		context.fillStyle = '#000';
+	}
+	drawCircle(25+x*25, 25+y*25, 10);
+	
+}
+
+function drawMove(x,y,value) {
+	context.globalAlpha = value;
+	context.fillStyle = '#f00'; 
+	if (value > .95) {		
+	context.fillStyle = '#0f0'; 
+	} 
+	drawCircle(25+x*25, 25+y*25, 5);
+	context.globalAlpha = 1.0;
 }
 
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
-console.log(context);
-context.fillStyle   = '#EBD246'; // blue
-// Draw some rectangles.
-context.fillRect  (0, 0, 500, 500);
-var i=0;
-var xOffset = 25.5;
-var yOffset = 25.5;
-for (i =0; i < 19; i++) {
-	context.moveTo(i*25+xOffset, yOffset);
-	context.lineTo(i*25+yOffset, 475.5);
-	context.stroke();
-}
-for (i =0; i < 19; i++) {
-	context.moveTo(xOffset, i*25+yOffset);
-	context.lineTo(475.5, i*25+xOffset);
-	context.stroke();
-}
-drawStone(3,3);
-drawStone(3,3);
+context.fillStyle = '#000';
+
+drawCanvas();
 
 </script>
 <script>
@@ -72,7 +128,7 @@ function lol() {
 }
 	
 $("#button1").click(function() {	
-	$.getJSON("GetBestMoves", {}, function(data) {alert('win');});
+	
 });
 </script>
 </body>

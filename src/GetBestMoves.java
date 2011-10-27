@@ -1,17 +1,22 @@
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import server.GnuGoDecoder;
+import server.Move;
 import server.MoveImporter;
 import server.Properties;
+import server.SGFWriter;
 
 
 /**
@@ -33,6 +38,20 @@ public class GetBestMoves extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String requestString = request.getQueryString().replaceAll("%2C", ",");
+		if (requestString != "") {
+			System.out.println(requestString.substring(6));
+			String[] pointsString = requestString.substring(6).split("\\+");
+			System.out.println("XXX");
+			ArrayList<Move> moves = new ArrayList<Move>();
+			for (String point : pointsString) {
+				System.out.println(point);
+				String[] points = point.split(",");
+				Move move = new Move(new Point(Integer.parseInt(points[0]),Integer.parseInt(points[1])));
+				moves.add(move);
+			}
+			GnuGoDecoder.writeSgf(moves);
+		}
 		
 		try {
 		Runtime r = Runtime.getRuntime();
@@ -57,6 +76,7 @@ public class GetBestMoves extends HttpServlet {
 		PrintWriter out = response.getWriter();
 	    out.println(returnMessage);
 	    out.close();
+	    
 	}
 
 	/**

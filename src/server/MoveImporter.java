@@ -18,6 +18,17 @@ public class MoveImporter {
 			}
 		}
 		ArrayList<Move> moves = convertLinesToMoves(moveGeneration);
+		double maxValue = 0;
+		for (Move move : moves) {
+			move.point.y = 18 - move.point.y;
+			if (move.value > maxValue) {
+				maxValue = move.value;
+			}
+		}
+		for (Move move : moves) {
+			move.value = move.value/maxValue;
+		}
+		
 		String returnJson = convertMovesToJson(moves);
 		return returnJson;
 	}	

@@ -6,4 +6,5 @@ public class Properties {
 	public static final String pythonMoveExtractor = gnuGoDirectory + "\\moveExtractor.py";
 	public static final String pythonMovesList = gnuGoDirectory + "\\moves.txt";
 	public static final String pythonSgf = gnuGoDirectory + "\\moves.sgf";
+	public static final String pythonScript = gnuGoDirectory + "\\moveExtractor.py";
 }

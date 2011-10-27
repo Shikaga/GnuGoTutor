@@ -61,6 +61,12 @@ public class TestGnuGoDecoder {
 	}
 	
 	@Test
+	public void testQ16Is1515() throws Exception {
+		Point point = GnuGoDecoder.convertStringToPosition("Q16");
+		assertEquals(new Point(15,15), point);
+	}
+	
+	@Test
 	public void testWriteSgf() throws Exception {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		moves.add(new Move(new Point(0,0)));
